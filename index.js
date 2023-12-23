@@ -34,6 +34,8 @@ async function run() {
       .db("toyLandDB")
       .collection("categories");
 
+    const toysAllCollection = client.db("toyLandDB").collection("allToys");
+
     app.get("/categories", async (req, res) => {
       const result = await toysCategoryCollection.find().toArray();
       res.send(result);
