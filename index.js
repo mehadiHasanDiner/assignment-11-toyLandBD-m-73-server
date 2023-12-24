@@ -50,9 +50,31 @@ async function run() {
 
     app.post("/toys", async (req, res) => {
       const body = req.body;
+      // for sorting according
+      body.createAt = new Date();
+      // if(!body){
+      //   return res.status(404).send({ message: "Not Found"});
+      // }
       const result = await toysAllCollection.insertOne(body);
-      // res.send(result);
+      res.send(result);
+      // console.log(result);
+    });
+
+    app.get("/toys", async (req, res) => {
+      const result = await toysAllCollection
+        .find()
+        .sort({ createAt: -1 })
+        .toArray();
+      res.send(result);
       console.log(result);
+    });
+
+    app.get("/toys/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      console.log(query);
+      const result = await toysAllCollection.findOne(query);
+      res.send(result);
     });
 
     // Send a ping to confirm a successful connection
