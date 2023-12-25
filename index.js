@@ -93,6 +93,14 @@ async function run() {
       res.send(result);
     });
 
+    app.delete("/updateToy/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await toysAllCollection.deleteOne(query);
+      // console.log(result);
+      res.send(result);
+    });
+
     app.put("/updateToy/:id", async (req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
