@@ -66,15 +66,23 @@ async function run() {
         .sort({ createAt: -1 })
         .toArray();
       res.send(result);
-      console.log(result);
+      // console.log(result);
     });
 
     app.get("/toys/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
-      console.log(query);
       const result = await toysAllCollection.findOne(query);
       res.send(result);
+    });
+
+    app.get("/myToys/:email", async (req, res) => {
+      const myEmail = req.params.email;
+      console.log(myEmail);
+      const myToys = await toysAllCollection
+        .find({ postedBy: myEmail })
+        .toArray();
+      res.send(myToys);
     });
 
     // Send a ping to confirm a successful connection
