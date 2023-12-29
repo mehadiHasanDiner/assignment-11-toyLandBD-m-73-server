@@ -36,6 +36,8 @@ async function run() {
 
     const toysAllCollection = client.db("toyLandDB").collection("allToys");
 
+    const feedbackCollection = client.db("toyLandDB").collection("feedbacks");
+
     app.get("/categories", async (req, res) => {
       const result = await toysCategoryCollection.find().toArray();
       res.send(result);
@@ -118,6 +120,23 @@ async function run() {
       const result = await toysAllCollection.updateOne(filter, toy, options);
       res.send(result);
     });
+
+    app.post("/feedbacks", async (req, res) => {
+      const body = req.body;
+      body.createAt = new Date();
+      const result = await feedbackCollection.insertOne(body);
+      res.send(result);
+    });
+
+
+     app.get("/feedbacks", async (req, res) => {
+       const result = await feedbackCollection
+         .find()
+         .sort({ createAt: -1 })
+         .toArray();
+       res.send(result);
+       // console.log(result);
+     });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
