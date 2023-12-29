@@ -128,15 +128,14 @@ async function run() {
       res.send(result);
     });
 
-
-     app.get("/feedbacks", async (req, res) => {
-       const result = await feedbackCollection
-         .find()
-         .sort({ createAt: -1 })
-         .toArray();
-       res.send(result);
-       // console.log(result);
-     });
+    app.get("/feedbacks", async (req, res) => {
+      const result = await feedbackCollection
+        .find()
+        .sort({ createAt: -1 })
+        .toArray();
+      res.send(result);
+      // console.log(result);
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
