@@ -80,7 +80,7 @@ async function run() {
 
     app.get("/myToys/:email", async (req, res) => {
       const myEmail = req.params.email;
-      console.log(myEmail);
+      // console.log(myEmail);
       const myToys = await toysAllCollection
         .find({ postedBy: myEmail })
         .toArray();
