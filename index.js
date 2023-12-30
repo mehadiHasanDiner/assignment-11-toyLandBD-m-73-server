@@ -63,9 +63,15 @@ async function run() {
     });
 
     app.get("/toys", async (req, res) => {
+      console.log(req.query);
+      const page = parseInt(req.query.page) || 0;
+      const limit = parseInt(req.query.limit) || 10;
+      const skip = page * limit;
       const result = await toysAllCollection
         .find()
         .sort({ createAt: -1 })
+        .skip(skip)
+        .limit(limit)
         .toArray();
       res.send(result);
       // console.log(result);
@@ -76,6 +82,11 @@ async function run() {
       const query = { _id: new ObjectId(id) };
       const result = await toysAllCollection.findOne(query);
       res.send(result);
+    });
+
+    app.get("/totalToys", async (req, res) => {
+      const result = await toysAllCollection.estimatedDocumentCount();
+      res.send({ totalItems: result });
     });
 
     app.get("/myToys/:email", async (req, res) => {
