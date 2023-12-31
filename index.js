@@ -38,11 +38,13 @@ async function run() {
 
     const feedbackCollection = client.db("toyLandDB").collection("feedbacks");
 
+    // for homepage category section
     app.get("/categories", async (req, res) => {
       const result = await toysCategoryCollection.find().toArray();
       res.send(result);
     });
 
+    // for homepage category items
     app.get("/categories/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -50,6 +52,7 @@ async function run() {
       res.send(result);
     });
 
+    // for posting new toy data
     app.post("/toys", async (req, res) => {
       const body = req.body;
       // for sorting according
@@ -62,6 +65,18 @@ async function run() {
       // console.log(result);
     });
 
+    // for getting all toys data by searching
+    app.get("/toysTitle/:text", async (req, res) => {
+      const searchText = req.params.text;
+      const result = await toysAllCollection
+        .find({
+          $or: [{ toyName: { $regex: searchText, $options: "i" } }],
+        })
+        .toArray();
+      res.send(result);
+    });
+
+    // for getting all toys data by pagination.
     app.get("/toys", async (req, res) => {
       console.log(req.query);
       const page = parseInt(req.query.page) || 0;
@@ -77,6 +92,7 @@ async function run() {
       // console.log(result);
     });
 
+    // for getting an item data from the pagination page
     app.get("/toys/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -84,11 +100,13 @@ async function run() {
       res.send(result);
     });
 
+    // for getting the sum of total items
     app.get("/totalToys", async (req, res) => {
       const result = await toysAllCollection.estimatedDocumentCount();
       res.send({ totalItems: result });
     });
 
+    // for getting data of a logged in user
     app.get("/myToys/:email", async (req, res) => {
       const myEmail = req.params.email;
       // console.log(myEmail);
@@ -98,6 +116,7 @@ async function run() {
       res.send(myToys);
     });
 
+    // for getting data of a single item of a logged in user
     app.get("/updateToy/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -106,6 +125,7 @@ async function run() {
       res.send(result);
     });
 
+    // for deleting data of an item of a logged in user
     app.delete("/updateToy/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -114,6 +134,7 @@ async function run() {
       res.send(result);
     });
 
+    // for updating data of an item of a logged in user
     app.put("/updateToy/:id", async (req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
@@ -132,6 +153,7 @@ async function run() {
       res.send(result);
     });
 
+    // for posting feedback in the homepage
     app.post("/feedbacks", async (req, res) => {
       const body = req.body;
       body.createAt = new Date();
@@ -139,6 +161,7 @@ async function run() {
       res.send(result);
     });
 
+    // for getting posted feedback from the homepage
     app.get("/feedbacks", async (req, res) => {
       const result = await feedbackCollection
         .find()
