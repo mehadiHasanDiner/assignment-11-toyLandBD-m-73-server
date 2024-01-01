@@ -105,13 +105,9 @@ async function run() {
     // for getting data of a logged in user
     app.get("/myToys/:email", async (req, res) => {
       const myEmail = req.params.email;
-      const query = {};
-      const options = {
-        sort: { price: 1 },
-      };
       // console.log(myEmail);
       const myToys = await toysAllCollection
-        .find({ postedBy: myEmail }, query, options)
+        .find({ postedBy: myEmail })
         .toArray();
       res.send(myToys);
     });
