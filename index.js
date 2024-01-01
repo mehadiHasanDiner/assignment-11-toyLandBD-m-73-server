@@ -107,7 +107,7 @@ async function run() {
       const myEmail = req.params.email;
       const query = {};
       const options = {
-        sort: { price: -1 },
+        sort: { price: 1 },
       };
       // console.log(myEmail);
       const myToys = await toysAllCollection
